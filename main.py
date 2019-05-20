@@ -3,7 +3,7 @@ latin_key = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' \
 
 def get_string_from_code(coded_list, key):
     """
-    @lenth : Nombre de caracteres
+    @coded_list : list comportant les indices a prendre de key
     @key : string comportant tous les caracteres utilises
     """
     decoded = ''
@@ -13,45 +13,38 @@ def get_string_from_code(coded_list, key):
 
 def generate_password(length, key=latin_key):
     """
-    @lenth : Nombre de caracteres
+    @length : Nombre de caracteres
     @key : string comportant tous les caracteres utilises
     """
 
     # Initialisation
     password = []
-    max_index = len(key) - 1
+    pos = 0
+    max_char_code = len(key) - 1
     coded_list = [0] * length
     split = '\n'
-    running = True
 
     # Creation du mdp
-    while running:
-        index = 0
-        while True:
-            if coded_list[index] + 1 <= max_index:
-                coded_list[index] += 1
-                break
+    while True:
+        if coded_list[pos] + 1 <= max_char_code:
+            coded_list[pos] += 1
+            password.append(get_string_from_code(coded_list, key))
+        else:
+            pos += 1
+            while pos < length and coded_list[pos] == max_char_code:
+                pos += 1
+            if pos < length:
+                for i in range(pos):
+                    coded_list[i] = 0
+                coded_list[pos] += 1
+                password.append(get_string_from_code(coded_list, key))
+                pos = 0
             else:
-                index += 1
-        password.append(get_string_from_code(coded_list, key))
-
-    str = ''
-    for char in actual_list:
-        str += key[char]
-
+                break
     # Retour de CODE
-
-    aa 00
-    bb 11
-    ab 01
-    ba 10
-    number > len(key)
-    [0][0][0][1][0]
-    [0][0][0][1][1]
-    [0][0][1][1][0]
-
-
+    return password
 
 #-------------[EXECUTION CODE]-----------------------------
-generated = generate_password(4, "azer")
+generated = generate_password(4)
 print(generated)
+print(len(generated))
